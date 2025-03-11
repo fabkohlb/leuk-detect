@@ -76,7 +76,9 @@ docs/_build/
 target/
 
 # Jupyter Notebook
+notebooks/*
 .ipynb_checkpoints
+*.ipynb
 
 # IPython
 profile_default/
@@ -129,6 +131,7 @@ celerybeat.pid
 
 # Environments
 .env
+.envrc
 .venv
 env/
 venv/
