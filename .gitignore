@@ -173,3 +173,5 @@ cython_debug/
 # MacOS specific
 .DS_Store
 
+# Raw data
+raw_data
