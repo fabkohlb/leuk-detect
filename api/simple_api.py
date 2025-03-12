@@ -10,7 +10,8 @@ import tensorflow as tf
 
 
 app = FastAPI()
-app.state.model = load_model('/Users/fredi/code/fgeb/08-blood-cancer-prediction-model/train01.keras')
+# Model path needs to be set
+app.state.model = load_model('api/train01.keras')
 
 
 
