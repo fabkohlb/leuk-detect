@@ -178,3 +178,4 @@ cython_debug/
 
 # Raw data
 raw_data/
+.env
