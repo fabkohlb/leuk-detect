@@ -9,3 +9,8 @@ seaborn
 scikit-learn
 streamlit
 opencv-python
+google-cloud-storage==2.14.0
+mlflow==2.1.1
+
+#google-api-core==2.8.2
+#googleapis-common-protos==1.56.4
