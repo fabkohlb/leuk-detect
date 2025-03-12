@@ -9,3 +9,7 @@ seaborn
 scikit-learn
 streamlit
 opencv-python
+fastapi
+tensorflow
+uvicorn
+python-multipart
