@@ -77,7 +77,6 @@ docs/_build/
 target/
 
 # Jupyter Notebook
-notebooks/*
 .ipynb_checkpoints
 *.ipynb
 
@@ -179,3 +178,4 @@ cython_debug/
 
 # Raw data
 raw_data/
+.env
