@@ -24,7 +24,7 @@ def run_train():
         epochs=1,
         validation_data=data_val
     )
-    m.save(os.path.join(params.LOCAL_MODEL_PATH, '0001.h5'))
+    #m.save(os.path.join(params.LOCAL_MODEL_PATH, '0001.h5'))
     registry.save_model(m)
     print(result)
 
