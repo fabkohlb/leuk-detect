@@ -33,52 +33,76 @@ def mlflow_run(func):
     return wrapper
 
 
-def load_model():
+def load_latest_model():
     print("Load latest model from GCS...")
     client = storage.Client()
     blobs = list(client.get_bucket(params.BUCKET_NAME).list_blobs(prefix="model"))
-
     print(f"Blobs: {blobs}")
 
     try:
         latest_blob = max(blobs, key=lambda x: x.updated)
-        latest_model_path_to_save = os.path.join(params.LOCAL_MODEL_PATH, latest_blob.name)
+        latest_model_path_to_save = os.path.join(params.LOCAL_MODEL_PATH, latest_blob.name.split('/')[-1])
         latest_blob.download_to_filename(latest_model_path_to_save)
         latest_model = keras.models.load_model(latest_model_path_to_save)
 
         print("✅ Latest model downloaded from cloud storage")
-
         return latest_model
-    except:
+    except Exception as e:
         print(f"\n❌ No model found in GCS bucket {params.BUCKET_NAME}")
-
+        print(f"Exception: {e}")
         return None
 
 @mlflow_run
-def save_model(model):
+def save_model(model, history, duration_sec):
     timestamp = time.strftime("%Y%m%d-%H%M%S")
+    client = MlflowClient()
 
     # Save model locally
-    # model_path = os.path.join(params.LOCAL_MODEL_PATH, f"{timestamp}.h5")
-    # model.save(model_path)
-    # print("✅ Model saved locally")
+    model_path = os.path.join(params.LOCAL_MODEL_PATH, f"{timestamp}.keras")
+    model.save(model_path)
+    print("✅ Model saved locally")
 
     # Save on google cloud
-    # model_filename = model_path.split("/")[-1] # e.g. "20230208-161047.h5" for instance
-    # client = storage.Client()
-    # bucket = client.bucket(params.BUCKET_NAME)
-    # blob = bucket.blob(f"models/{model_filename}")
+    model_filename = model_path.split("/")[-1]
+    client = storage.Client()
+    bucket = client.bucket(params.BUCKET_NAME)
+    blob = bucket.blob(f"models/{model_filename}")
     # blob.upload_from_filename(model_path)
-    # print("✅ Model saved to GCS")
+    print("✅ Model saved to GCS")
 
     # Safe to ml flow
-    print(model.summary())
-    mlflow.tensorflow.log_model(
-        model=model,
-        artifact_path="model",
-        registered_model_name=params.MLFLOW_MODEL_NAME
-    )
-    print("✅ Model saved to mlflow")
+    p = {
+        "optimizer": model.optimizer.get_config(),
+        "loss": model.loss,
+        "epochs": len(history.epoch),
+    }
+    print(f"Log params: {p}")
+    mlflow.log_params({
+        "optimizer": model.optimizer.get_config()['name'],
+        "optimizer": model.optimizer.get_config()['learning_rate'],
+        "optimizer": model.optimizer.get_config()['name'],
+        "loss": model.loss,
+        "epochs": len(history.epoch),
+    })
+    mlflow.log_text(model.to_json(), "model_architecture.json")
+
+    # Save history
+    for metric in history.history.keys():
+        for epoch, value in enumerate(history.history[metric]):
+            mlflow.log_metric(metric, value, step=epoch)
+    mlflow.log_param('model_filename', model_filename)
+
+    minutes, seconds = divmod(duration_sec, 60)
+    hours, minutes = divmod(minutes, 60)
+    mlflow.log_param("training_duration_hms", f"{int(hours)}h {int(minutes)}m {int(seconds)}s")
+
+    print("✅ Metadata saved to mlflow")
+
+    # Register a new version with only metadata (no actual model file)
+    # model_version = client.create_model_version(
+    #     name=params.MLFLOW_MODEL_NAME,
+    #     source=blob
+    # )
 
     return None
 
@@ -86,6 +110,6 @@ def save_model(model):
 
 if __name__ == '__main__':
     from pathlib import Path
-    modelpath="/Users/fredi/code/fgeb/08-blood-cancer-prediction-model/leuk-detect/models/20250312-144801.h5"
-    loaded_model = keras.models.load_model(Path(modelpath))
-    save_model(loaded_model)
+    model = load_model()
+    if model is not None:
+        model.save('./models/test.keras')

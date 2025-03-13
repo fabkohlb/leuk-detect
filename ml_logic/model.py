@@ -19,6 +19,6 @@ def create_compile_model_fredi():
     # Step 4: Compile the model
     model.compile(optimizer='adam',
                 loss='categorical_crossentropy',  # Change this depending on your problem (e.g., 'binary_crossentropy' for binary classification)
-                metrics=['accuracy'])
+                metrics=['accuracy', 'precision', 'recall'])
 
     return model

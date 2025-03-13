@@ -11,6 +11,3 @@ streamlit
 opencv-python
 google-cloud-storage==2.14.0
 mlflow
-
-#google-api-core==2.8.2
-#googleapis-common-protos==1.56.4
