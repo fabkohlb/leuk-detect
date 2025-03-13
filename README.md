@@ -3,6 +3,9 @@ Blood cancer (Acute Myeloid Leukemia) prediction model
 
 Single cell leukocyte image classification using CNN
 
+## Set up Access from Virtual Machine to Bucket from a Local Terminal by copying local Access rights
+gsutil iam ch serviceAccount:SERVICE_ACCOUNT_OF_VM:roles/storage.admin gs://project_blood_cancer
+
 ## Installation
 To install the tool, run the following commands:
 
