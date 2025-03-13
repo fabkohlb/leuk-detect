@@ -22,8 +22,8 @@ def run_train():
     es = EarlyStopping(patience=2)
     history = m.fit(
         data_train,
-        batch_size=32,
-        epochs=1,
+        batch_size=params.BATCH_SIZE,
+        epochs=params.EPOCHS,
         validation_data=data_val,
     )
     training_duration = time.time() - start_time
@@ -36,13 +36,14 @@ def load_dataset():
     print(f"## Look in path {params.DATA_DIR}")
     sample_img = cv2.imread(os.path.join(params.DATA_DIR, 'BAS', 'BAS_0001.png'))
     print(f"Shape of sample img: {sample_img.shape}")
-    val_split = 0.3
+
+    val_split = params.VALIDATION_SPLIT
 
     data_train = image_dataset_from_directory(
         directory=params.DATA_DIR,
         labels='inferred',
         label_mode='categorical',
-        batch_size=32,
+        batch_size=params.BATCH_SIZE,
         image_size=(224, 224),
         validation_split=val_split,
         subset='training',
@@ -54,7 +55,7 @@ def load_dataset():
         directory=params.DATA_DIR,
         labels='inferred',
         label_mode='categorical',
-        batch_size=32,
+        batch_size=params.BATCH_SIZE,
         image_size=(224, 224),
         validation_split=val_split,  # Same 30% validation split
         subset='validation',  # Explicitly specify validation subset
