@@ -9,10 +9,10 @@ To install the tool, run the following commands:
 sudo apt update && sudo apt upgrade -y &&
 sudo apt install git -y &&
 sudo apt install make &&
-cp .env.sample .env 
 
-git clone https://github.com/fabkohlb/leuk-detect.git
-cd leuk-detect/
+git clone https://github.com/fabkohlb/leuk-detect.git &&
+cd leuk-detect/ &&
+cp .env.sample .env 
 
 make setup
 
