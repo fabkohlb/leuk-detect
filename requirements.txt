@@ -9,3 +9,5 @@ seaborn
 scikit-learn
 streamlit
 opencv-python
+google-cloud-storage==2.14.0
+mlflow
