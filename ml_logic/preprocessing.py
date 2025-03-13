@@ -44,14 +44,21 @@ def augment_img_class(cell_type: str, num_augm_pics_per_pic: int):
     cell_type: the cell you want augment the images
     num_augm_pics_per_pic: how many new images are generated per image in the selected category
     """
-    #DATA_SET = 'data/AML-Cytomorphology_LMU'
-    data_dir = os.path.dirname(__file__)
-    cell_dir = os.path.join(data_dir, '..', 'data', 'AML-Cytomorphology_LMU', cell_type)
+    # Try to construct the relative path
+    data_dir = os.path.dirname(__file__)  # Get current script directory
+    relative_path = os.path.join(data_dir, '..', 'data', 'train')
+
+    # Check if the relative path exists; if not, use the absolute path from params
+    if os.path.exists(relative_path):
+        cell_dir = os.path.join(relative_path, cell_type)  # Use relative path
+    else:
+        cell_dir = os.path.join(params.DATA_DIR, 'train', cell_type)  # Use absolute path
+    #cell_dir = os.path.join(params.DATA_DIR,'train', cell_type)
     if not os.path.exists(cell_dir):
         print(f"❌ Folder '{cell_type}' not found!")
         return
 
-    img_names = os.listdir(cell_dir)
+    img_names = os.listdir(cell_dir) 
 
     for img_name in img_names:
         print(img_name)
@@ -67,7 +74,7 @@ def augment_img_class(cell_type: str, num_augm_pics_per_pic: int):
                 aug_path = os.path.join(cell_dir, aug_name)  # Save in the same folder
                 aug_img_np = tf.cast(augmented_images[aug_name], tf.uint8).numpy()
                 # Convert tensor to NumPy
-                cv2.imwrite(aug_path, aug_img_np)  # Save image
+                cv2.imwrite(aug_path, aug_img_np)  #Save image
     print(f"✅ Augmentation completed for '{cell_type}'. Images saved in the same folder.\n{len(img_names)*num_augm_pics_per_pic} new images were generated!")
 
 
