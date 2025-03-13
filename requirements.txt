@@ -13,3 +13,5 @@ fastapi
 tensorflow
 uvicorn
 python-multipart
+google-cloud-storage==2.14.0
+mlflow
