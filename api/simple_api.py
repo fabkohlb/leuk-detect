@@ -28,9 +28,9 @@ app.add_middleware(
 def predict():
     print('### Predict')
     # Files
-    for file in os.listdir('api'):
+    for file in os.listdir('api/images'):
         if file.endswith('.png'):
-            img = cv2.imread(os.path.join('api', file))
+            img = cv2.imread(os.path.join('api/images', file))
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             print(f"Input shape: {img.shape}")
 
@@ -46,7 +46,7 @@ def predict():
             class_index = np.argmax(prediction)
             print(f"Prediction: {prediction}")
             print(f"Class index: {class_index}")
-            os.remove(os.path.join('api', file))
+            os.remove(os.path.join('api/images', file))
             return {
                 "prediction": float(class_index)
             }
@@ -63,7 +63,7 @@ async def create_upload_file(file: UploadFile):
     # Get and safe file
     image_bytes = await file.read()
     image = np.array(Image.open(BytesIO(image_bytes)))
-    cv2.imwrite(os.path.join('api', file.filename), image)
+    cv2.imwrite(os.path.join('api/images', file.filename), image)
     return {
         "shape": image.shape
     }
