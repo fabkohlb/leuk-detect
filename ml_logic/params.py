@@ -6,6 +6,7 @@ DATA_DIR = os.environ.get("DATA_DIR")
 LOCAL_MODEL_PATH = os.environ.get("LOCAL_MODEL_PATH")
 
 BUCKET_NAME = os.environ.get("BUCKET_NAME")
+BUCKET = os.environ.get("BUCKET")
 INSTANCE = os.environ.get("INSTANCE")
 
 MLFLOW_TRACKING_URI = os.environ.get('MLFLOW_TRACKING_URI')
