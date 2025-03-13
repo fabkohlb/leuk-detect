@@ -8,8 +8,24 @@ To install the tool, run the following commands:
 
 sudo apt update && sudo apt upgrade -y
 sudo apt install git -y
+sudo apt install make
+cp .env.sample .env
 
 git clone https://github.com/fabkohlb/leuk-detect.git
 cd leuk-detect/
 
 make setup
+
+## Add disk to Google cloud compute VM
+List available disks
+lsblk
+Output for example
+
+Format disk
+sudo mkfs.ext4 {Path to disk}
+
+Create mount directory
+sudo mkdir /mnt/{any name}
+
+Mount
+sudo mount {Path to disk} /mnt/{any name}
