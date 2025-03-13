@@ -11,8 +11,19 @@ import tensorflow as tf
 
 app = FastAPI()
 # Model path needs to be set
-app.state.model = load_model('api/train01.keras')
+#app.state.model = load_model('api/train01.keras')   # backup if try/except does not work
 
+# Current model + BUCKET
+model_name = "20250313-120438.keras"   # hardcoded - needs to be adapted if model changes 
+bucket_name = os.environ.get("BUCKET")
+
+# If model is not in /api download model_name, else use model_name in /api
+try:
+    app.state.model = load_model(f'api/{model_name}')
+
+except:
+    os.system(f"gsutil cp {bucket_name}/models/{model_name} .")
+    app.state.model = load_model(f'api/{model_name}')
 
 
 # Allowing all middleware is optional, but good practice for dev purposes
@@ -23,6 +34,7 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
+
 
 @app.get("/predict")
 def predict():
