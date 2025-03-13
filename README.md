@@ -10,11 +10,11 @@ gsutil iam ch serviceAccount:SERVICE_ACCOUNT_OF_VM:roles/storage.admin gs://proj
 To install the tool, run the following commands:
 
 sudo apt update && sudo apt upgrade -y &&
-sudo apt install git make unzip -y
+sudo apt install git && make unzip -y
 
 git clone https://github.com/fabkohlb/leuk-detect.git &&
 cd leuk-detect/ &&
-cp .env.sample .env 
+cp .env.sample .env
 
 make setup
 
