@@ -6,10 +6,10 @@ Single cell leukocyte image classification using CNN
 ## Installation
 To install the tool, run the following commands:
 
-sudo apt update && sudo apt upgrade -y
-sudo apt install git -y
-sudo apt install make
-cp .env.sample .env
+sudo apt update && sudo apt upgrade -y &&
+sudo apt install git -y &&
+sudo apt install make &&
+cp .env.sample .env 
 
 git clone https://github.com/fabkohlb/leuk-detect.git
 cd leuk-detect/
