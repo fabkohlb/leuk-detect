@@ -8,7 +8,7 @@ To install the tool, run the following commands:
 
 sudo apt update && sudo apt upgrade -y &&
 sudo apt install git -y &&
-sudo apt install make &&
+sudo apt install make
 
 git clone https://github.com/fabkohlb/leuk-detect.git &&
 cd leuk-detect/ &&
