@@ -4,6 +4,8 @@ from keras.utils import image_dataset_from_directory
 import params
 import registry
 import time
+import cv2
+import os
 
 
 def run_train():
@@ -31,7 +33,9 @@ def run_train():
 
 def load_dataset():
     print(f"### Load Dataset")
-
+    print(f"## Look in path {params.DATA_DIR}")
+    sample_img = cv2.imread(os.path.join(params.DATA_DIR, 'BAS', 'BAS_0001.png'))
+    print(f"Shape of sample img: {sample_img.shape}")
     val_split = 0.3
 
     data_train = image_dataset_from_directory(
