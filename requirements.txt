@@ -9,3 +9,5 @@ seaborn
 scikit-learn
 streamlit
 opencv-python
+tensorflow
+cv2
