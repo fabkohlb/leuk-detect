@@ -1,4 +1,4 @@
-.PHONY: data clean # data and clean are not files but executables
+.PHONY: data clean setup # data and clean are not files but executables
 
 include .env
 
@@ -17,3 +17,11 @@ data:
 # Remove the data directory
 clean:
 	rm -rf $(DATA_DIR)
+
+
+# Setting up a virtual machine
+# sudo apt install git -y
+# git clone https://github.com/fabkohlb/leuk-detect.git
+
+setup:
+	curl https://pyenv.run | bash
