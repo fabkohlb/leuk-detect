@@ -36,8 +36,6 @@ setup:
 	pyenv install 3.10.6
 	pyenv virtualenv 3.10.6 leuk-detect
 
-	git clone https://github.com/fabkohlb/leuk-detect.git
-	cd leuk-detect/
 	pyenv activate leuk-detect
 	pip install -r requirements.txt
 
