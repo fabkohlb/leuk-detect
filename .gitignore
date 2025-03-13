@@ -179,4 +179,4 @@ cython_debug/
 # Raw data
 raw_data/
 models/
-.env
+data/
