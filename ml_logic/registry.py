@@ -67,7 +67,7 @@ def save_model(model, history, duration_sec):
     client = storage.Client()
     bucket = client.bucket(params.BUCKET_NAME)
     blob = bucket.blob(f"models/{model_filename}")
-    # blob.upload_from_filename(model_path)
+    blob.upload_from_filename(model_path)
     print("✅ Model saved to GCS")
 
     # Safe to ml flow
