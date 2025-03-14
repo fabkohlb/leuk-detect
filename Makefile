@@ -21,6 +21,8 @@ setup:
 	echo 'eval "$$(pyenv virtualenv-init -)"' >> ~/.bashrc
 	source ~/.bashrc
 	curl -fsSL https://pyenv.run | bash
+	rm -rf ~/.pyenv
+	curl -fsSL https://pyenv.run | bash
 
 # python
 	sudo apt install -y make build-essential libssl-dev zlib1g-dev
