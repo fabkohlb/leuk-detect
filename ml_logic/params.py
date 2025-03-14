@@ -1,5 +1,4 @@
 import os
-import numpy as np
 
 ##################  VARIABLES  ##################
 DATA_DIR = os.environ.get("DATA_DIR")
@@ -13,6 +12,6 @@ MLFLOW_TRACKING_URI = os.environ.get('MLFLOW_TRACKING_URI')
 MLFLOW_EXPERIMENT = os.environ.get('MLFLOW_EXPERIMENT')
 MLFLOW_MODEL_NAME = os.environ.get('MLFLOW_MODEL_NAME')
 
-BATCH_SIZE = os.environ.get('BATCH_SIZE')
-EPOCHS = os.environ.get('EPOCHS')
-VALIDATION_SPLIT = os.environ.get('VALIDATION_SPLIT')
+BATCH_SIZE = int(os.environ.get('BATCH_SIZE'))
+EPOCHS = int(os.environ.get('EPOCHS'))
+VALIDATION_SPLIT = float(os.environ.get('VALIDATION_SPLIT'))
