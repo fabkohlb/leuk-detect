@@ -15,7 +15,7 @@ setup:
 	sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
 # pyenv
-	echo export PYENV_ROOT="$$HOME/.pyenv" >> ~/.bashrc
+	echo 'export PYENV_ROOT="$$HOME/.pyenv"' >> ~/.bashrc
 	echo '[[ -d $$PYENV_ROOT/bin ]] && export PATH="$$PYENV_ROOT/bin:$$PATH"' >> ~/.bashrc
 	echo 'eval "$$(pyenv init - bash)"' >> ~/.bashrc
 	echo 'eval "$$(pyenv virtualenv-init -)"' >> ~/.bashrc
