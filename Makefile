@@ -1,9 +1,13 @@
-.PHONY: setup data clean # data and clean are not files but executables
+SHELL := /bin/bash
+.ONESHELL:
+.PHONY: setup data clean api # data and clean are not files but executables
+include .env
 
 setup:
 # direnv
-	cp .env.sample .env
-	sudo apt install direnv -y && eval "$(direnv hook bash)" && source ~/.bashrc
+	sudo apt install direnv -y
+	eval "$$(direnv hook bash)"
+	source ~/.bashrc
 	echo dotenv >> .envrc && direnv allow
 
 # language settings
@@ -12,11 +16,12 @@ setup:
 	sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
 # pyenv
-	echo export PYENV_ROOT="$HOME/.pyenv" >> ~/.bashrc
-	echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-	echo 'eval "$(pyenv init - bash)"' >> ~/.bashrc
-	source ~/.bashrc
 	curl -fsSL https://pyenv.run | bash
+	echo 'export PYENV_ROOT="$$HOME/.pyenv"' >> ~/.bashrc
+	echo '[[ -d $$PYENV_ROOT/bin ]] && export PATH="$$PYENV_ROOT/bin:$$PATH"' >> ~/.bashrc
+	echo 'eval "$$(pyenv init - bash)"' >> ~/.bashrc
+	echo 'eval "$$(pyenv virtualenv-init -)"' >> ~/.bashrc
+	source ~/.bashrc
 
 # python
 	sudo apt install -y make build-essential libssl-dev zlib1g-dev
@@ -24,21 +29,16 @@ setup:
 	sudo apt install -y llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev
 	sudo apt install -y libffi-dev liblzma-dev python3-openssl
 
+	source ~/.bashrc
 	pyenv install 3.10.6
 
 # project dependencies
 	pyenv virtualenv 3.10.6 leuk-detect
-	pyenv activate leuk-detect
+	python -m pip install --upgrade pip
 	pip install -r requirements.txt
-
-# data
-	cp .env.sample .env
-	make data
 
 # Download the data from Google Cloud Storage and unzip it
 data:
-	include .env
-	make clean
 	mkdir -p $(DATA_DIR)
 	gsutil cp $(BUCKET)/$(ZIP_FILE) .
 	unzip -o $(ZIP_FILE) -d $(DATA_DIR)
@@ -52,5 +52,7 @@ data:
 
 # Remove the data directory
 clean:
-	include .env
 	rm -rf $(DATA_DIR)
+
+api:
+	uvicorn api.simple_api:app --reload
