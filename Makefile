@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 .ONESHELL:
-.PHONY: setup data clean # data and clean are not files but executables
+.PHONY: setup data clean api # data and clean are not files but executables
 include .env
 
 setup:
@@ -53,3 +53,6 @@ data:
 # Remove the data directory
 clean:
 	rm -rf $(DATA_DIR)
+
+api:
+	uvicorn api.simple_api:app --reload
