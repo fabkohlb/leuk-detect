@@ -14,4 +14,5 @@ MLFLOW_MODEL_NAME = os.environ.get('MLFLOW_MODEL_NAME')
 
 BATCH_SIZE = int(os.environ.get('BATCH_SIZE'))
 EPOCHS = int(os.environ.get('EPOCHS'))
+TEST_SPLIT = float(os.environ.get('TEST_SPLIT'))
 VALIDATION_SPLIT = float(os.environ.get('VALIDATION_SPLIT'))
