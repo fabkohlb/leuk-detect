@@ -2,7 +2,6 @@
 
 setup:
 # direnv
-	cp .env.sample .env
 	sudo apt install direnv -y && eval "$(direnv hook bash)" && source ~/.bashrc
 	echo dotenv >> .envrc && direnv allow
 
@@ -29,15 +28,15 @@ setup:
 # project dependencies
 	pyenv virtualenv 3.10.6 leuk-detect
 	pyenv activate leuk-detect
+	python -m pip install --upgrade pip
 	pip install -r requirements.txt
 
 # data
-	cp .env.sample .env
 	make data
 
 # Download the data from Google Cloud Storage and unzip it
+include .env
 data:
-	include .env
 	make clean
 	mkdir -p $(DATA_DIR)
 	gsutil cp $(BUCKET)/$(ZIP_FILE) .

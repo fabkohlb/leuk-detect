@@ -9,7 +9,6 @@ seaborn
 scikit-learn
 streamlit
 opencv-python
-cv2
 fastapi
 tensorflow
 uvicorn
