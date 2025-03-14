@@ -33,6 +33,30 @@ def mlflow_run(func):
     return wrapper
 
 
+def load_model(model_name):
+    # Check if model is locally available
+    if not os.path.exists(os.path.join(params.LOCAL_MODEL_PATH, model_name)):
+        print("Model not available locally")
+    print("Load model from GCS...")
+    client = storage.Client()
+    blobs = list(client.get_bucket(params.BUCKET_NAME).list_blobs(prefix="model"))
+    for blob in blobs:
+        if blob.name.split('/')[-1] == model_name:
+            print(f"Found model in bucket: {blob.name}")
+    exit()
+
+    try:
+        model_path_to_save = os.path.join(params.LOCAL_MODEL_PATH, model_name)
+        # latest_blob.download_to_filename(latest_model_path_to_save)
+        # latest_model = keras.models.load_model(latest_model_path_to_save)
+
+        print("✅ Latest model downloaded from cloud storage")
+    except Exception as e:
+        print(f"\n❌ No model found in GCS bucket {params.BUCKET_NAME}")
+        print(f"Exception: {e}")
+        return None
+
+
 def load_latest_model():
     print("Load latest model from GCS...")
     client = storage.Client()
