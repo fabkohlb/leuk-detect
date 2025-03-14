@@ -44,7 +44,7 @@ for folder in os.listdir(TRAIN_DIR):
         random.shuffle(files)  # Shuffle files
 
         # Compute ceil(10% of files)
-        num_val_files = math.ceil(params.VALIDATION_SPLIT * len(files))
+        num_val_files = math.ceil(params.VALIDATION_SPLIT / (1 - params.TEST_SPLIT) * len(files))
         val_files = files[:num_val_files]  # Select first N shuffled files
 
         # Create a corresponding class folder in the val directory
