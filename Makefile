@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+.ONESHELL:
 .PHONY: setup data clean # data and clean are not files but executables
 include .env
 
