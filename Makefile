@@ -1,8 +1,12 @@
+SHELL := /bin/bash
 .PHONY: setup data clean # data and clean are not files but executables
+include .env
 
 setup:
 # direnv
-	sudo apt install direnv -y && eval "$(direnv hook bash)" && source ~/.bashrc
+	sudo apt install direnv -y
+	eval "$$(direnv hook bash)"
+	source ~/.bashrc
 	echo dotenv >> .envrc && direnv allow
 
 # language settings
@@ -11,9 +15,10 @@ setup:
 	sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
 # pyenv
-	echo export PYENV_ROOT="$HOME/.pyenv" >> ~/.bashrc
-	echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-	echo 'eval "$(pyenv init - bash)"' >> ~/.bashrc
+	echo export PYENV_ROOT="$$HOME/.pyenv" >> ~/.bashrc
+	echo '[[ -d $$PYENV_ROOT/bin ]] && export PATH="$$PYENV_ROOT/bin:$$PATH"' >> ~/.bashrc
+	echo 'eval "$$(pyenv init - bash)"' >> ~/.bashrc
+	echo 'eval "$$(pyenv virtualenv-init -)"' >> ~/.bashrc
 	source ~/.bashrc
 	curl -fsSL https://pyenv.run | bash
 
@@ -27,17 +32,11 @@ setup:
 
 # project dependencies
 	pyenv virtualenv 3.10.6 leuk-detect
-	pyenv activate leuk-detect
 	python -m pip install --upgrade pip
 	pip install -r requirements.txt
 
-# data
-	make data
-
 # Download the data from Google Cloud Storage and unzip it
-include .env
 data:
-	make clean
 	mkdir -p $(DATA_DIR)
 	gsutil cp $(BUCKET)/$(ZIP_FILE) .
 	unzip -o $(ZIP_FILE) -d $(DATA_DIR)
@@ -51,5 +50,4 @@ data:
 
 # Remove the data directory
 clean:
-	include .env
 	rm -rf $(DATA_DIR)
