@@ -5,9 +5,8 @@ import os
 import cv2
 from tensorflow.image import central_crop,  stateless_random_flip_left_right, stateless_random_flip_up_down, stateless_random_brightness
 import params
-def augmented_image(img, NUM_AUGMENTATIONS, img_name):
-    # Define the number of augmented images per original
-    NUM_AUGMENTATIONS = 3
+def augmented_image(img, NUM_AUGMENTATIONS, img_name, brightness=True, flip_left_right=True, flip_up_down=True, cropping=False, gaussian_noise=False, hue=False, saturation=False,
+                    contrast=False):
 
     # Store augmented images
     new_images = {}
@@ -15,27 +14,55 @@ def augmented_image(img, NUM_AUGMENTATIONS, img_name):
     for i in range(NUM_AUGMENTATIONS):
         seed = (i, 0)  # Seed for reproducibility
         augmented_img = img  # Start with original image
+        if brightness:
+            # Randomly decide which transformations to apply
+            if random.random() > 0.5:  # 50% chance to adjust brightness
+                augmented_img = stateless_random_brightness(augmented_img, max_delta=0.35, seed=seed)
 
-        # Randomly decide which transformations to apply
-        if random.random() > 0.5:  # 50% chance to adjust brightness
-            augmented_img = stateless_random_brightness(augmented_img, max_delta=0.6, seed=seed)
+        if flip_left_right:
+            if random.random() > 0.5:  # 50% chance to flip left-right
+                augmented_img = stateless_random_flip_left_right(augmented_img, seed=seed)
 
-        if random.random() > 0.5:  # 50% chance to flip left-right
-            augmented_img = stateless_random_flip_left_right(augmented_img, seed=seed)
+        if flip_up_down:
+            if random.random() > 0.5:  # 50% chance to flip up-down
+                augmented_img = stateless_random_flip_up_down(augmented_img, seed=seed)
 
-        if random.random() > 0.5:  # 50% chance to flip up-down
-            augmented_img = stateless_random_flip_up_down(augmented_img, seed=seed)
+        if cropping:
+            if random.random() > 0.5:  # 50% chance to crop
+                central_fraction = random.uniform(0.8, 0.99)  # Random crop fraction
+                augmented_img = central_crop(augmented_img, central_fraction=central_fraction)
 
-        if random.random() > 0.5:  # 50% chance to crop
-            central_fraction = random.uniform(0.4, 0.9)  # Random crop fraction
-            augmented_img = central_crop(augmented_img, central_fraction=central_fraction)
+        if gaussian_noise:
+            if random.random() > 0.5:  # 50% chance to add noise
+                augmented_img = tf.image.convert_image_dtype(augmented_img, tf.float32)  # Convert to float32
+                noise = tf.random.normal(shape=tf.shape(augmented_img), mean=0.0, stddev=0.05)
+                augmented_img = tf.add(augmented_img, noise)
+                augmented_img = tf.clip_by_value(augmented_img, 0.0, 1.0)  # Keep values in range
+                augmented_img = tf.image.convert_image_dtype(augmented_img, tf.uint8)
+
+        if hue:
+            if random.random() > 0.5:  # 50% chance to adjust hue
+                hue_delta = random.uniform(-0.08, 0.08) # here the color is just slightly shifted
+                augmented_img = tf.image.adjust_hue(augmented_img, hue_delta)
+
+        if saturation:
+            if random.random() > 0.5:  # 50% chance to adjust saturation
+                saturation_factor = random.uniform(0.7, 2)
+                augmented_img = tf.image.adjust_saturation(augmented_img, saturation_factor)
+
+        if contrast:
+            if random.random() > 0.5:  # 50% chance to adjust contrast
+                contrast_factor = random.uniform(0, 2.5)
+                augmented_img = tf.image.adjust_contrast(augmented_img, contrast_factor)
+
 
         # Store the final augmented image
         aug_img_name = f"augm_img_{i}_{img_name}"
         new_images[aug_img_name] = augmented_img
     return new_images
 
-def augment_img_class(cell_type: str, num_augm_pics_per_pic: int):
+def augment_img_class(cell_type: str, num_augm_pics_per_pic: int, brightness=True, flip_left_right=True, flip_up_down=True, cropping=False, gaussian_noise=False,
+                      hue=False, saturation=False, contrast=False):
     """
     Cell types available for input: ['KSC', 'MYO', 'NGB', 'MON', 'PMO', 'MMZ', 'EBO', 'MYB',
     'NGS', 'BAS', 'MOB', 'LYA', 'LYT', 'EOS', 'PMB']
@@ -58,7 +85,7 @@ def augment_img_class(cell_type: str, num_augm_pics_per_pic: int):
         print(f"❌ Folder '{cell_type}' not found!")
         return
 
-    img_names = os.listdir(cell_dir) 
+    img_names = os.listdir(cell_dir)
 
     for img_name in img_names:
         print(img_name)
@@ -69,7 +96,8 @@ def augment_img_class(cell_type: str, num_augm_pics_per_pic: int):
                 continue
 
         #generate augmented images
-            augmented_images = augmented_image(img, num_augm_pics_per_pic, img_name)
+            augmented_images = augmented_image(img, num_augm_pics_per_pic, img_name, brightness, flip_left_right, flip_up_down,
+                                               cropping, gaussian_noise, hue, saturation,contrast)
             for aug_name in augmented_images:
                 aug_path = os.path.join(cell_dir, aug_name)  # Save in the same folder
                 aug_img_np = tf.cast(augmented_images[aug_name], tf.uint8).numpy()
@@ -90,5 +118,5 @@ def preprocess_images(images, output_img_size=(224, 224)):
 
 if __name__ == '__main__':
     # Test the preprocessing
-    augment_img_class('NGB', 2)
+    augment_img_class('MOB', 1)
     print('Done')
