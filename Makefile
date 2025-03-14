@@ -28,6 +28,7 @@ setup:
 	sudo apt install -y llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev
 	sudo apt install -y libffi-dev liblzma-dev python3-openssl
 
+	source ~/.bashrc
 	pyenv install 3.10.6
 
 # project dependencies
