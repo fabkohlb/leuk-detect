@@ -19,7 +19,7 @@ def evaluate_model(model_name):
 def _eval_model(model):
     # Load evaluation data
     data = image_dataset_from_directory(
-        directory=os.path.join(params.DATA_DIR, 'evaluation'),
+        directory=os.path.join(params.DATA_DIR, 'validation'),
         labels='inferred',
         label_mode='categorical',
         batch_size=params.BATCH_SIZE,

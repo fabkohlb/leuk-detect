@@ -1,7 +1,7 @@
 import os
 import cv2
 import numpy as np
-import params # i changed it to from . so i could acces it from my notebook
+import ml_logic.params # i changed it to from . so i could acces it from my notebook
 #import ml_logic.params as params
 import tensorflow as tf
 
