@@ -1,8 +1,9 @@
-.PHONY: data clean # data and clean are not files but executables
+.PHONY: data clean setup # data and clean are not files but executables
 
 setup:
 	curl -fsSL https://pyenv.run | bash
 	export PYENV_ROOT="$HOME/.pyenv"
+	eval "$(pyenv virtualenv-init -)"
 	[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 	eval "$(pyenv init - bash)"
 
@@ -37,3 +38,4 @@ data:
 # Remove the data directory
 clean:
 	rm -rf $(DATA_DIR)
+	rm -rf ~/.pyenv
