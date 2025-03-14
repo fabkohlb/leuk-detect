@@ -1,29 +1,23 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from tensorflow.keras.saving import load_model
 import cv2
 import numpy as np
 from PIL import Image
 from io import BytesIO
 import os
 import tensorflow as tf
+from ml_logic.registry import load_model
 
 
 app = FastAPI()
-# Model path needs to be set
-#app.state.model = load_model('api/train01.keras')   # backup if try/except does not work
 
-# Current model + BUCKET
-model_name = "20250313-120438.keras"   # hardcoded - needs to be adapted if model changes 
-bucket_name = os.environ.get("BUCKET")
+# Load params
+model_name = os.environ.get('PRODUCTION_MODEL_NAME')
+app.state.model = load_model(model_name)
 
-# If model is not in /api download model_name, else use model_name in /api
-try:
-    app.state.model = load_model(f'api/{model_name}')
-
-except:
-    os.system(f"gsutil cp {bucket_name}/models/{model_name} .")
-    app.state.model = load_model(f'api/{model_name}')
+# Check if image folder exists
+if not os.path.exists('images'):
+    os.makedirs('images')
 
 
 # Allowing all middleware is optional, but good practice for dev purposes
@@ -39,19 +33,19 @@ app.add_middleware(
 @app.get("/predict")
 def predict():
     print('### Predict')
-    
+
     predictions = []   # list to store predictions
-    
+
     # Get all PNG images in the folder
     image_files = [file for file in os.listdir('api/images') if file.endswith('.png')]
-    
+
     if not image_files:
         return {"message": "No images found to process"}
-    
+
     # Files
     for file in image_files:
         file_path = os.path.join('api/images', file)
-        
+
         # Read and process image
         img = cv2.imread(file_path)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -69,12 +63,12 @@ def predict():
         class_index = np.argmax(prediction)
         print(f"Prediction: {prediction}")
         print(f"Class index: {class_index}")
-        
+
         predictions.append({"filename": file, "prediction": int(class_index)})
-        
+
         # Remove processed image
         os.remove(file_path)
-    
+
     print({f"predictions": predictions})
     return {"predictions": predictions}
 
@@ -90,8 +84,8 @@ async def create_upload_file(file: UploadFile):
     # Get and safe file
     image_bytes = await file.read()
     image = np.array(Image.open(BytesIO(image_bytes)))
-    cv2.imwrite(os.path.join('api/images', file.filename), image)
+    bgr_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    cv2.imwrite(os.path.join('api/images', file.filename), bgr_image)
     return {
         "shape": image.shape
     }
-
