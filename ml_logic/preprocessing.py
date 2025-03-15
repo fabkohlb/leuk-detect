@@ -121,7 +121,34 @@ def preprocess_images(images, output_img_size=(224, 224)):
 
 if __name__ == '__main__':
     # Test the preprocessing
-    augment_img_class('LYA', 1, brightness=0.5, flip_left_right=0.5, flip_up_down=0.5, cropping=0.5,
-                  gaussian_noise=0.5, hue=0.5, saturation=0.5, contrast=0.5)
+    augment_img_class('BAS', 5, brightness=0, flip_left_right=1.0, flip_up_down=1.0, cropping=0.0,
+                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+
+    augment_img_class('EBO', 5, brightness=0, flip_left_right=1.0, flip_up_down=1.0, cropping=0.0,
+                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+
+    augment_img_class('KSC', 5, brightness=0, flip_left_right=1.0, flip_up_down=1.0, cropping=0.0,
+                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+
+    augment_img_class('LYA', 5, brightness=0, flip_left_right=1.0, flip_up_down=1.0, cropping=0.0,
+                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+
+    augment_img_class('MMZ', 5, brightness=0, flip_left_right=1.0, flip_up_down=1.0, cropping=0.0,
+                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+
+    augment_img_class('MOB', 5, brightness=0, flip_left_right=1.0, flip_up_down=1.0, cropping=0.0,
+                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+
+    augment_img_class('MYB', 5, brightness=0, flip_left_right=1.0, flip_up_down=1.0, cropping=0.0,
+                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+
+    augment_img_class('NGB', 5, brightness=0, flip_left_right=1.0, flip_up_down=1.0, cropping=0.0,
+                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+
+    augment_img_class('PMB', 5, brightness=0, flip_left_right=1.0, flip_up_down=1.0, cropping=0.0,
+                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+
+    augment_img_class('PMO', 5, brightness=0, flip_left_right=1.0, flip_up_down=1.0, cropping=0.0,
+                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
 
     print('Done')
