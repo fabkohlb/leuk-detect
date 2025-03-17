@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 ##################  VARIABLES  ##################
 DATA_DIR = os.environ.get("DATA_DIR")
