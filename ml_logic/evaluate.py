@@ -77,4 +77,4 @@ def _eval_model_fredi(model):
 
 
 if __name__ == '__main__':
-    evaluate_model('20250314-005854.keras')
+    evaluate_model(params.EVALUATION_MODEL_NAME)
