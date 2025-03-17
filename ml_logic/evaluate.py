@@ -48,7 +48,7 @@ def _eval_model(model):
     plt.xlabel("Predicted Label")
     plt.ylabel("True Label")
     plt.title("Confusion Matrix")
-    plt.savefig('eval_plot.png')
+    plt.savefig(f'eval_{params.EVALUATION_MODEL_NAME}_plot.png')
 
     # Print classification report
     print("\nClassification Report:\n", classification_report(y_true, y_pred, target_names=class_names))
