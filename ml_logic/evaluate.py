@@ -50,7 +50,7 @@ def _eval_model(model):
     plt.xlabel("Predicted Label")
     plt.ylabel("True Label")
     plt.title("Confusion Matrix")
-    file_name = f"eval_{params.EVALUATION_MODEL_NAME}_plot.png"
+    file_name = f"{params.EVALUATION_MODEL_NAME}_eval_plot.png"
     plt.savefig(file_name)
 
     report_dict = classification_report(y_true, y_pred, target_names=class_names, output_dict=True)
@@ -61,8 +61,9 @@ def _eval_model(model):
     bucket = client.bucket(params.BUCKET_NAME)
     blob = bucket.blob(f"evaluation/{file_name}")
     blob.upload_from_filename(filename=file_name)
+
     blob2 = bucket.blob(f"{params.EVALUATION_MODEL_NAME}_classification_report.csv")
-    blob2.upload_from_filename(filename=f"{params.EVALUATION_MODEL_NAME}_classification_report.csv")
+    blob2.upload_from_filename(filename=f"evaluation/{params.EVALUATION_MODEL_NAME}_classification_report.csv")
 
     # Evaluate model (optional)
     result = model.evaluate(data, batch_size=params.BATCH_SIZE, verbose="auto")
