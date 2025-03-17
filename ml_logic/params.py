@@ -10,6 +10,11 @@ LOCAL_MODEL_PATH = os.environ.get("LOCAL_MODEL_PATH")
 BUCKET_NAME = os.environ.get("BUCKET_NAME")
 BUCKET = os.environ.get("BUCKET")
 INSTANCE = os.environ.get("INSTANCE")
+GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
+DOCKER_IMAGE_NAME = os.environ.get("DOCKER_IMAGE_NAME")
+GCP_REGION = os.environ.get("GCP_REGION")
+DOCKER_REPO_NAME = os.environ.get("DOCKER_REPO_NAME")
+
 
 MLFLOW_TRACKING_URI = os.environ.get('MLFLOW_TRACKING_URI')
 MLFLOW_EXPERIMENT = os.environ.get('MLFLOW_EXPERIMENT')
