@@ -65,6 +65,9 @@ def _eval_model(model):
     blob2 = bucket.blob(f"evaluation/{params.EVALUATION_MODEL_NAME}_classification_report.csv")
     blob2.upload_from_filename(filename=f"{params.EVALUATION_MODEL_NAME}_classification_report.csv")
 
+    os.remove(file_name)
+    os.remove(f"{params.EVALUATION_MODEL_NAME}_classification_report.csv")
+
     # Evaluate model (optional)
     result = model.evaluate(data, batch_size=params.BATCH_SIZE, verbose="auto")
     print("Evaluation Metrics:", result)
