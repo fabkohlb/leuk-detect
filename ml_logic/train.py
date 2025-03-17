@@ -33,29 +33,22 @@ def run_train():
 
 def load_dataset():
     print(f"### Load Dataset")
-    val_split = params.VALIDATION_SPLIT
 
     data_train = image_dataset_from_directory(
-        directory=params.DATA_DIR,
+        directory=os.path.join(params.DATA_DIR, 'train'),
         labels='inferred',
         label_mode='categorical',
         batch_size=params.BATCH_SIZE,
         image_size=(224, 224),
-        validation_split=val_split,
-        subset='training',
-        seed=123
     )
 
     # Validation dataset
     data_val = image_dataset_from_directory(
-        directory=params.DATA_DIR,
+        directory=os.path.join(params.DATA_DIR, 'validation'),
         labels='inferred',
         label_mode='categorical',
         batch_size=params.BATCH_SIZE,
         image_size=(224, 224),
-        validation_split=val_split,  # Same 30% validation split
-        subset='validation',  # Explicitly specify validation subset
-        seed=123  # Same seed ensures consistency
     )
 
     return data_train, data_val

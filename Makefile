@@ -72,3 +72,6 @@ data:
 # Remove the data directory
 clean:
 	rm -rf $(DATA_DIR)
+
+api:
+	uvicorn api.simple_api:app --reload
