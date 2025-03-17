@@ -43,10 +43,11 @@ def _eval_model(model):
 
     # Compute confusion matrix
     cm = confusion_matrix(y_true, y_pred)
+    cm_normalized = cm.astype('float') / cm.sum(axis=1, keepdims=True)
 
     # Plot confusion matrix
     plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=class_names, yticklabels=class_names)
+    sns.heatmap(cm_normalized, annot=True, fmt="d", cmap="Blues", xticklabels=class_names, yticklabels=class_names)
     plt.xlabel("Predicted Label")
     plt.ylabel("True Label")
     plt.title("Confusion Matrix")
