@@ -18,3 +18,4 @@ TEST_SPLIT = float(os.environ.get('TEST_SPLIT'))
 VALIDATION_SPLIT = float(os.environ.get('VALIDATION_SPLIT'))
 
 PRODUCTION_MODEL_NAME = os.environ.get('PRODUCTION_MODEL_NAME')
+EVALUATION_MODEL_NAME = os.environ.get('EVALUATION_MODEL_NAME')
