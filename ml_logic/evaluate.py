@@ -7,6 +7,8 @@ import numpy as np
 from sklearn.metrics import confusion_matrix, classification_report
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
+from google.cloud import storage
 
 
 
@@ -41,17 +43,31 @@ def _eval_model(model):
 
     # Compute confusion matrix
     cm = confusion_matrix(y_true, y_pred)
+    cm_normalized = cm.astype('float') / cm.sum(axis=1, keepdims=True)
 
     # Plot confusion matrix
     plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=class_names, yticklabels=class_names)
+    sns.heatmap(cm_normalized, annot=True, fmt="d", cmap="Blues", xticklabels=class_names, yticklabels=class_names)
     plt.xlabel("Predicted Label")
     plt.ylabel("True Label")
     plt.title("Confusion Matrix")
-    plt.show()
+    file_name = f"{params.EVALUATION_MODEL_NAME}_eval_plot.png"
+    plt.savefig(file_name)
 
-    # Print classification report
-    print("\nClassification Report:\n", classification_report(y_true, y_pred, target_names=class_names))
+    report_dict = classification_report(y_true, y_pred, target_names=class_names, output_dict=True)
+    pd.DataFrame(report_dict).to_csv(f"{params.EVALUATION_MODEL_NAME}_classification_report.csv")
+
+    # Save model to GCS
+    client = storage.Client()
+    bucket = client.bucket(params.BUCKET_NAME)
+    blob = bucket.blob(f"evaluation/{file_name}")
+    blob.upload_from_filename(filename=file_name)
+
+    blob2 = bucket.blob(f"evaluation/{params.EVALUATION_MODEL_NAME}_classification_report.csv")
+    blob2.upload_from_filename(filename=f"{params.EVALUATION_MODEL_NAME}_classification_report.csv")
+
+    os.remove(file_name)
+    os.remove(f"{params.EVALUATION_MODEL_NAME}_classification_report.csv")
 
     # Evaluate model (optional)
     result = model.evaluate(data, batch_size=params.BATCH_SIZE, verbose="auto")
@@ -77,4 +93,4 @@ def _eval_model_fredi(model):
 
 
 if __name__ == '__main__':
-    evaluate_model('20250314-005854.keras')
+    evaluate_model(params.EVALUATION_MODEL_NAME)
