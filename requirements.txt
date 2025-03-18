@@ -19,3 +19,4 @@ transformers
 torch
 tf-keras
 torchvision
+accelerate>=0.26.0
