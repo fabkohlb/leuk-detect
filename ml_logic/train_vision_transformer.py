@@ -87,6 +87,7 @@ def create_vision_transformer(data_train, data_val, num_labels):
 
 
 def load_and_process_dataset(dataset_name='train'):
+    print('📂 Loading dataset:', dataset_name)
     data_raw = tf.keras.preprocessing.image_dataset_from_directory(
         directory=os.path.join(params.DATA_DIR, dataset_name),
         labels='inferred',
@@ -109,6 +110,7 @@ def load_and_process_dataset(dataset_name='train'):
     # Convert images to PyTorch tensors
     images = torch.tensor(images).permute(0, 3, 1, 2)  # Convert shape to [batch_size, channels, height, width]
     labels = torch.tensor(np.argmax(labels, axis=1), dtype=torch.long)
+    print("✅ Dataset loaded. Turn into CustomDataset.")
     return CustomDataset(images, labels, image_processor, transform=transform_augmentation), num_labels
 
 
