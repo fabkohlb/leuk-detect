@@ -1,10 +1,7 @@
 from tensorflow import keras
 from google.cloud import storage
 import os
-try:
-    from ml_logic import params
-except:
-    import params
+from ml_logic import params
 import time
 
 import mlflow

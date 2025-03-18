@@ -22,3 +22,27 @@ def create_compile_model_fredi():
                 metrics=['accuracy', 'precision', 'recall'])
 
     return model
+
+
+def create_compile_model_fabi():
+    base_model = tf.keras.applications.EfficientNetB5(
+        include_top=False,
+        weights="imagenet",
+        input_shape=(224, 224, 3),
+    )
+    model = models.Sequential([
+        base_model,                                         # Add the ResNet50 base model
+        layers.GlobalAveragePooling2D(),                    # Add pooling layer to reduce feature map size
+        layers.Dense(1024, activation='relu'),              # Add a fully connected hidden layer (optional)
+        layers.Dense(512, activation='relu'),
+        layers.Dense(256, activation='relu'),                
+        layers.Dropout(0.5),                                # Add a dropout layer to reduce overfitting
+        layers.Dense(15, activation='softmax')              # Custom output layer (e.g., for 10 classes, use softmax for multi-class classification)
+    ])
+
+    # Compile the model
+    model.compile(optimizer='adam',
+                loss='categorical_crossentropy',  # Change this depending on your problem (e.g., 'binary_crossentropy' for binary classification)
+                metrics=['accuracy', 'precision', 'recall'])
+
+    return model
