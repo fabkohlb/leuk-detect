@@ -40,6 +40,9 @@ def load_model(model_name):
     # Check if model is locally available
     model_path = os.path.join(params.LOCAL_MODEL_PATH, model_name)
     if not os.path.exists(model_path):
+        if not os.path.exists(params.LOCAL_MODEL_PATH):
+            os.makedirs(params.LOCAL_MODEL_PATH)
+            print(f"Created directory: {params.LOCAL_MODEL_PATH}")
         print("Model not available locally, load model from GCS...")
         client = storage.Client()
         blobs = list(client.get_bucket(params.BUCKET_NAME).list_blobs(prefix="model"))
