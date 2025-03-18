@@ -31,14 +31,18 @@ def create_compile_model_fabi():
         input_shape=(224, 224, 3),
     )
     model = models.Sequential([
-        base_model,                                         # Add the ResNet50 base model
-        layers.GlobalAveragePooling2D(),                    # Add pooling layer to reduce feature map size
-        layers.Dense(1024, activation='relu'),              # Add a fully connected hidden layer (optional)
-        layers.Dense(512, activation='relu'),
-        layers.Dense(256, activation='relu'),                
-        layers.Dropout(0.5),                                # Add a dropout layer to reduce overfitting
-        layers.Dense(15, activation='softmax')              # Custom output layer (e.g., for 10 classes, use softmax for multi-class classification)
-    ])
+            base_model,                                         # Add the ResNet50 base model
+            layers.GlobalAveragePooling2D(),                    # Add pooling layer to reduce feature map size
+            layers.Dense(1024, activation='relu'),              # Add a fully connected hidden layer (optional)
+            layers.BatchNormalization(),
+            layers.Dropout(0.3),
+            layers.Dense(512, activation='relu'),
+            layers.BatchNormalization(),
+            layers.Dropout(0.4),
+            layers.Dense(256, activation='relu'),
+            layers.BatchNormalization(),
+            layers.Dropout(0.5),                                # Add a dropout layer to reduce overfitting
+            layers.Dense(15, activation='softmax')])            # Custom output layer (e.g., for 10 classes, use softmax for multi-class classification)
 
     # Compile the model
     model.compile(optimizer='adam',
