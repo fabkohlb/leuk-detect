@@ -111,8 +111,11 @@ def load_and_process_dataset(dataset_name='train'):
 def train_vision_transformer():
     data_train, num_labels_train = load_and_process_dataset('train')
     data_val, num_labels_val = load_and_process_dataset('validation')
+    print("✅ Data loaded and processed.")
     assert num_labels_train == num_labels_val, "The number of labels in the training and validation datasets must be the same."
     trainer = create_vision_transformer(data_train, data_val, num_labels=num_labels_train)
+    print("✅ Trainer created.")
+    print("🚀 Training...")
     res = trainer.train()
     return res
 
