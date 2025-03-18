@@ -56,6 +56,7 @@ def predict():
     for pred in prediction:
         print(f"Prediction: {int(np.argmax(pred))}")
         predictions.append({"filename": file_names[i], "prediction": int(np.argmax(pred))})
+        os.remove(os.path.join(image_dir, file_names[i]))
         i += 1
 
     print(predictions)
