@@ -7,7 +7,7 @@ def create_compile_model_fredi():
         include_top=False,
         include_preprocessing=True,
         weights="imagenet",
-        input_shape=(384, 384, 3),
+        input_shape=(224, 224, 3),
     )
     model = models.Sequential([
         base_model,                                         # Add the base model
