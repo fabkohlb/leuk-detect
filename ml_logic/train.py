@@ -6,6 +6,8 @@ import registry
 import time
 import cv2
 import os
+import numpy as np
+from sklearn.utils.class_weight import compute_class_weight
 
 
 def run_train():
@@ -18,6 +20,26 @@ def run_train():
     # Load data
     data_train, data_val = load_dataset()
 
+    # First, count the files in each class directory to determine class distribution
+    import os
+    import pathlib
+
+    data_dir = pathlib.Path("path/to/your/training/data")
+    class_names = [item.name for item in data_dir.glob('*') if item.is_dir()]
+    class_counts = []
+
+    for class_name in class_names:
+        class_path = data_dir / class_name
+        count = len(list(class_path.glob('*')))
+        class_counts.append(count)
+        print(f"Class {class_name}: {count} images")
+
+    # Calculate weights inversely proportional to class frequencies
+    total_images = sum(class_counts)
+    class_weights = {i: total_images / (len(class_names) * count)
+                            for i, count in enumerate(class_counts)}
+    class_weight_dict = dict(zip(range(len(class_names)), class_weights))
+
     # Train
     es = EarlyStopping(patience=2)
     history = m.fit(
@@ -25,6 +47,7 @@ def run_train():
         batch_size=params.BATCH_SIZE,
         epochs=params.EPOCHS,
         validation_data=data_val,
+        class_weight=class_weight_dict
     )
     training_duration = time.time() - start_time
     print(f"✅ Training complete in {(training_duration/60):.2f} minutes")

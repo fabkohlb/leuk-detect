@@ -2,8 +2,9 @@ import tensorflow as tf
 from tensorflow.keras import models, layers
 
 
+
 def create_compile_model_fredi():
-    base_model = tf.keras.applications.ConvNeXtXLarge(
+    base_model = tf.keras.applications.EfficientNetB7(
         include_top=False,
         include_preprocessing=True,
         weights="imagenet",
