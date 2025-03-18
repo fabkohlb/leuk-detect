@@ -1,7 +1,8 @@
 import os
 import cv2
 import numpy as np
-import ml_logic.params # i changed it to from . so i could acces it from my notebook
+from ml_logic import params
+# i changed it to from . so i could acces it from my notebook
 #import ml_logic.params as params
 import tensorflow as tf
 
@@ -41,8 +42,8 @@ def load_all_filenames_Freddi(data_dir):
 def load_dataset(val_split=0.3):
     """Returns the train_data, validation_data and test_data => you can input these directly in each method as they contain X, y"""
     #load train_data and validation_data
-    train_data = tf.keras.preprocessing.image_dataset_from_directory(params.DATA_SET, image_size=(224,224), label_mode='categorical', subset='training', validation_split=val_split, seed=1)
-    validation_data = tf.keras.preprocessing.image_dataset_from_directory(params.DATA_SET, image_size=(224,224), label_mode='categorical', subset='validation', validation_split=val_split, seed=1)
+    train_data = tf.keras.preprocessing.image_dataset_from_directory(params.DATA_DIR, image_size=(224,224), label_mode='categorical', subset='training', validation_split=val_split, seed=1)
+    validation_data = tf.keras.preprocessing.image_dataset_from_directory(params.DATA_DIR, image_size=(224,224), label_mode='categorical', subset='validation', validation_split=val_split, seed=1)
 
     #split validation data into val and test data
     # n = tf.data.experimental.cardinality(val_data)

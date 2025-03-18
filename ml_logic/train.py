@@ -19,13 +19,21 @@ def run_train():
     data_train, data_val = load_dataset()
 
     # Train
-    es = EarlyStopping(patience=2)
+    es = EarlyStopping(patience=5,
+                        restore_best_weights=True)
+
     history = m.fit(
         data_train,
         batch_size=params.BATCH_SIZE,
         epochs=params.EPOCHS,
         validation_data=data_val,
+        callbacks=[es]
     )
+    #if you want to store only the best model weights during training
+    # checkpoint = tf.keras.callbacks.ModelCheckpoint(
+    #     "best_model.h5", save_best_only=True, monitor="val_loss", verbose=1
+    # )
+
     training_duration = time.time() - start_time
     print(f"✅ Training complete in {(training_duration/60):.2f} minutes")
     registry.save_model(m, history, training_duration)
