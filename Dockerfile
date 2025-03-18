@@ -1,9 +1,6 @@
 FROM python:3.10.6-bullseye
 
-COPY ml_logic ml_logic
-COPY api api
 COPY requirements.txt requirements.txt
-COPY models models
 
 RUN apt-get clean -y
 RUN apt-get update -y
@@ -14,6 +11,10 @@ RUN apt-get install 'ffmpeg'\
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+
+COPY ml_logic ml_logic
+COPY api api
+COPY models models
 
 EXPOSE 8080
 
