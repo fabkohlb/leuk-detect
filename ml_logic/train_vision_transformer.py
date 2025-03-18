@@ -6,7 +6,7 @@ import tensorflow as tf
 import os
 import torch
 import numpy as np
-from ml_logic import params
+import params
 
 
 image_processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
