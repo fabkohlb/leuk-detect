@@ -8,6 +8,7 @@ import cv2
 import os
 import numpy as np
 from sklearn.utils.class_weight import compute_class_weight
+import pathlib
 
 
 def run_train():
@@ -20,11 +21,8 @@ def run_train():
     # Load data
     data_train, data_val = load_dataset()
 
-    # First, count the files in each class directory to determine class distribution
-    import os
-    import pathlib
-
-    data_dir = pathlib.Path("path/to/your/training/data")
+    data_dir = pathlib.Path(os.path.join(params.DATA_DIR, 'train')
+)
     class_names = [item.name for item in data_dir.glob('*') if item.is_dir()]
     class_counts = []
 
@@ -39,6 +37,7 @@ def run_train():
     class_weights = {i: total_images / (len(class_names) * count)
                             for i, count in enumerate(class_counts)}
     class_weight_dict = dict(zip(range(len(class_names)), class_weights))
+    print(class_weight_dict)
 
     # Train
     es = EarlyStopping(patience=2)
