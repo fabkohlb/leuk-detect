@@ -35,7 +35,7 @@ app.add_middleware(
 def predict():
     print('### Predict')
     data = image_dataset_from_directory(
-        directory=dir,
+        directory=image_dir,
         labels='inferred',
         label_mode=None,
         batch_size=32,

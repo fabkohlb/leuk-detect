@@ -1,10 +1,12 @@
+import sys
+import os
+print(f"Current working directory: {os.getcwd()}")
+
+
 from tensorflow import keras
 from google.cloud import storage
 import os
-try:
-    from ml_logic import params
-except:
-    import params
+from ml_logic import params
 import time
 
 import mlflow
@@ -44,6 +46,8 @@ def load_model(model_name):
             os.makedirs(params.LOCAL_MODEL_PATH)
             print(f"Created directory: {params.LOCAL_MODEL_PATH}")
         print("Model not available locally, load model from GCS...")
+        print(f"Bucket: {params.BUCKET_NAME}")
+        print(f"GCP Project: {params.GCP_PROJECT_ID}")
         client = storage.Client()
         blobs = list(client.get_bucket(params.BUCKET_NAME).list_blobs(prefix="model"))
         #print(f"Blobs: {blobs}")
@@ -138,11 +142,3 @@ def save_model(model, history, duration_sec):
     # )
 
     return None
-
-
-
-if __name__ == '__main__':
-    from pathlib import Path
-    model = load_model()
-    if model is not None:
-        model.save('./models/test.keras')
