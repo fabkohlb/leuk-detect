@@ -21,8 +21,7 @@ def run_train():
     # Load data
     data_train, data_val = load_dataset()
 
-    data_dir = pathlib.Path(os.path.join(params.DATA_DIR, 'train')
-)
+    data_dir = pathlib.Path(os.path.join(params.DATA_DIR, 'train'))
     class_names = [item.name for item in data_dir.glob('*') if item.is_dir()]
     class_counts = []
 
@@ -35,9 +34,9 @@ def run_train():
     # Calculate weights inversely proportional to class frequencies
     total_images = sum(class_counts)
     class_weights = {i: total_images / (len(class_names) * count)
-                            for i, count in enumerate(class_counts)}
-    class_weight_dict = dict(zip(range(len(class_names)), class_weights))
-    print(class_weight_dict)
+                    for i, count in enumerate(class_counts)}
+
+    print("Class weights:", class_weights)
 
     # Train
     es = EarlyStopping(patience=2)
