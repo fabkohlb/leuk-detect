@@ -8,8 +8,11 @@ import torch
 import numpy as np
 import params
 
-
+print("🤗 Load AutoImageProcessor")
 image_processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
+print("✅ Image processor loaded.")
+
+
 transform_augmentation = transforms.Compose([
     transforms.RandomCrop(224),  # Random crop
     transforms.RandomHorizontalFlip(),  # Random horizontal flip
