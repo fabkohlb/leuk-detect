@@ -45,7 +45,7 @@ def run_train():
         batch_size=params.BATCH_SIZE,
         epochs=params.EPOCHS,
         validation_data=data_val,
-        class_weight=class_weight_dict
+        class_weight=class_weights
     )
     training_duration = time.time() - start_time
     print(f"✅ Training complete in {(training_duration/60):.2f} minutes")
