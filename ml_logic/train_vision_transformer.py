@@ -62,9 +62,9 @@ def create_vision_transformer(data_train, data_val, num_labels):
         output_dir="./models",  # Output directory for saved models
         evaluation_strategy="epoch",  # Evaluate after each epoch
         learning_rate=2e-5,
-        per_device_train_batch_size=32,
-        per_device_eval_batch_size=32,
-        num_train_epochs=1,  # Set the number of epochs you want
+        per_device_train_batch_size=params.BATCH_SIZE,
+        per_device_eval_batch_size=params.BATCH_SIZE,
+        num_train_epochs=params.EPOCHS,  # Set the number of epochs you want
         weight_decay=0.01,
         logging_dir="./logs",  # Directory for logs
         save_steps=500,
