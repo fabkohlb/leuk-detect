@@ -11,6 +11,11 @@ from keras.utils import image_dataset_from_directory
 
 app = FastAPI()
 
+print("Local model path: ", os.environ.get('LOCAL_MODEL_PATH'))
+print("Bucket name: ", os.environ.get('BUCKET_NAME'))
+print("GCP Project ID: ", os.environ.get('GCP_PROJECT_ID'))
+print("Model name: ", os.environ.get('PRODUCTION_MODEL_NAME'))
+
 # Load params
 model_name = os.environ.get('PRODUCTION_MODEL_NAME')
 image_dir = '/tmp/images'
@@ -34,6 +39,9 @@ app.add_middleware(
 @app.get("/predict")
 def predict():
     print('### Predict')
+    print(f"Files in image dir befor pred: {os.listdir(image_dir)}")
+    if len(os.listdir(image_dir)) == 0:
+        return {"error": "No images found in image directory"}
     data = image_dataset_from_directory(
         directory=image_dir,
         labels='inferred',
@@ -42,6 +50,8 @@ def predict():
         image_size=(224, 224),
         shuffle=False  # Ensure order consistency
     )
+    if data is None:
+        return {"error": "No images found in image directory"}
 
     file_names = os.listdir(image_dir)
 
@@ -60,6 +70,7 @@ def predict():
         i += 1
 
     print(predictions)
+    print(f"Files in image dir after pred: {os.listdir(image_dir)}")
     return {"predictions": predictions}
 
 
