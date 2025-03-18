@@ -12,7 +12,7 @@ print("🤗 Load AutoImageProcessor")
 image_processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
 print("✅ Image processor loaded.")
 
-
+print("🔧 Define image transformations")
 transform_augmentation = transforms.Compose([
     transforms.RandomCrop(224),  # Random crop
     transforms.RandomHorizontalFlip(),  # Random horizontal flip
@@ -22,6 +22,7 @@ transform_augmentation = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])  # Normalize to [-1, 1]
 ])
+print("✅ Image transformations defined.")
 
 
 class CustomDataset(Dataset):
@@ -124,4 +125,5 @@ def train_vision_transformer():
 
 
 if __name__ == '__main__':
+    print("🚂 Training the Vision Transformer model...")
     train_vision_transformer()
