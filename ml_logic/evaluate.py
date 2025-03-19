@@ -43,7 +43,8 @@ def _eval_model(model):
 
     # Compute confusion matrix
     cm = confusion_matrix(y_true, y_pred)
-    cm_normalized = cm.astype('float') / cm.sum(axis=1, keepdims=True)
+    cm_normalized_float = cm.astype('float') / cm.sum(axis=1, keepdims=True)
+    cm_normalized = np.round(cm_normalized_float * 100).astype(int)
 
     # Plot confusion matrix
     plt.figure(figsize=(8, 6))
