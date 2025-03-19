@@ -121,34 +121,14 @@ def preprocess_images(images, output_img_size=(224, 224)):
 
 if __name__ == '__main__':
     # Test the preprocessing
-    augment_img_class('BAS', 10, brightness=0.3, flip_left_right=1.0, flip_up_down=1.0, cropping=0.3,
-                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.3)
+    augment_img_class('BAS', 5, brightness=0.0, flip_left_right=0.5, flip_up_down=0.5, cropping=0.0, gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+    augment_img_class('EBO', 5, brightness=0.0, flip_left_right=0.5, flip_up_down=0.5, cropping=0.0, gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+    augment_img_class('MMZ', 10, brightness=0.0, flip_left_right=0.5, flip_up_down=0.5, cropping=0.0, gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+    augment_img_class('MOB', 10, brightness=0.0, flip_left_right=0.5, flip_up_down=0.5, cropping=0.0, gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+    augment_img_class('MYB', 10, brightness=0.0, flip_left_right=0.5, flip_up_down=0.5, cropping=0.0, gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+    augment_img_class('NGB', 5, brightness=0.0, flip_left_right=0.5, flip_up_down=0.5, cropping=0.0, gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+    augment_img_class('PMB', 10, brightness=0.0, flip_left_right=0.5, flip_up_down=0.5, cropping=0.0, gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
+    augment_img_class('PMO', 5, brightness=0.0, flip_left_right=0.5, flip_up_down=0.5, cropping=0.0, gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.0)
 
-    augment_img_class('EBO', 10, brightness=0.3, flip_left_right=1.0, flip_up_down=1.0, cropping=0.3,
-                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.3)
-
-    augment_img_class('KSC', 10, brightness=0.3, flip_left_right=1.0, flip_up_down=1.0, cropping=0.3,
-                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.3)
-
-    augment_img_class('LYA', 10, brightness=0.3, flip_left_right=1.0, flip_up_down=1.0, cropping=0.3,
-                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.3)
-
-    augment_img_class('MMZ', 10, brightness=0.3, flip_left_right=1.0, flip_up_down=1.0, cropping=0.3,
-                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.3)
-
-    augment_img_class('MOB', 10, brightness=0.3, flip_left_right=1.0, flip_up_down=1.0, cropping=0.3,
-                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.3)
-
-    augment_img_class('MYB', 10, brightness=0.3, flip_left_right=1.0, flip_up_down=1.0, cropping=0.3,
-                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.3)
-
-    augment_img_class('NGB', 10, brightness=0.3, flip_left_right=1.0, flip_up_down=1.0, cropping=0.3,
-                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.3)
-
-    augment_img_class('PMB', 10, brightness=0.3, flip_left_right=1.0, flip_up_down=1.0, cropping=0.3,
-                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.3)
-
-    augment_img_class('PMO', 10, brightness=0.3, flip_left_right=1.0, flip_up_down=1.0, cropping=0.3,
-                  gaussian_noise=0.0, hue=0.0, saturation=0.0, contrast=0.3)
 
     print('Done')
