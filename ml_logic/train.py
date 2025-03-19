@@ -34,7 +34,7 @@ def run_train():
     print(f"Class weights: {class_weights}")
 
     # Create model
-    m = model.create_compile_model_fredi(len(data_train.class_names))
+    m = model.create_model_fredi_2(len(data_train.class_names))
 
     # Train
     es = EarlyStopping(patience=3, restore_best_weights=True)
