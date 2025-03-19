@@ -21,22 +21,8 @@ def run_train():
     # Load data
     data_train, data_val = load_dataset()
 
-    data_dir = pathlib.Path(os.path.join(params.DATA_DIR, 'train'))
-    class_names = [item.name for item in data_dir.glob('*') if item.is_dir()]
-    class_counts = []
-
-    for class_name in class_names:
-        class_path = data_dir / class_name
-        count = len(list(class_path.glob('*')))
-        class_counts.append(count)
-        print(f"Class {class_name}: {count} images")
-
-    # Calculate weights inversely proportional to class frequencies
-    total_images = sum(class_counts)
-    class_weights = {i: total_images / (len(class_names) * count)
-                    for i, count in enumerate(class_counts)}
-
-    print("Class weights:", class_weights)
+    # Compute class weights
+    class_weights = compute_class_weight())
 
     # Train
     es = EarlyStopping(patience=2)
@@ -74,6 +60,25 @@ def load_dataset():
 
     return data_train, data_val
 
+def compute_class_weight():
+
+    data_dir = pathlib.Path(os.path.join(params.DATA_DIR, 'train'))
+    class_names = [item.name for item in data_dir.glob('*') if item.is_dir()]
+    class_counts = []
+
+    for class_name in class_names:
+        class_path = data_dir / class_name
+        count = len(list(class_path.glob('*')))
+        class_counts.append(count)
+        print(f"Class {class_name}: {count} images")
+
+    # Calculate weights inversely proportional to class frequencies
+    total_images = sum(class_counts)
+    class_weights = {i: total_images / (len(class_names) * count)
+                    for i, count in enumerate(class_counts)}
+
+    print("Class weights:", class_weights)
+    return class_weights
 
 if __name__ == '__main__':
     run_train()

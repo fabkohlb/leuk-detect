@@ -4,20 +4,34 @@ from tensorflow.keras import models, layers
 
 
 def create_compile_model_fredi():
-    base_model = tf.keras.applications.EfficientNetB7(
+    augmenting = models.Sequential([
+        layers.experimental.preprocessing.Rescaling(1./255),
+        layers.experimental.preprocessing.RandomFlip("horizontal_and_vertical"),
+        layers.experimental.preprocessing.RandomRotation(0.2),
+        layers.experimental.preprocessing.RandomZoom(0.05),
+        layers.experimental.preprocessing.RandomTranslation(0.05, 0.05),
+    ])
+
+    base_model = tf.keras.applications.ResNet50(
         include_top=False,
         weights="imagenet",
         input_shape=(224, 224, 3),
     )
-    model = models.Sequential([
-        base_model,                                         # Add the base model
-        layers.GlobalAveragePooling2D(),                    # Add pooling layer to reduce feature map size
-        layers.Dense(1024, activation='relu'),              # Add a fully connected hidden layer
+
+    fully_connected = models.Sequential([
+        layers.GlobalAveragePooling2D(),
+        layers.Dense(1024, activation='relu'),
         layers.BatchNormalization(),
         layers.Dropout(0.3),
         layers.Dense(512, activation='relu'),
+        layers.BatchNormalization(),
         layers.Dropout(0.5),
-        layers.Dense(15, activation='softmax')              # Custom output layer (e.g., for 10 classes, use softmax for multi-class classification)
+        layers.Dense(15, activation='softmax')
+    ])
+    model = models.Sequential([
+        augmenting,
+        base_model,                                         # Add the base model
+        fully_connected
     ])
 
     # Step 4: Compile the model
