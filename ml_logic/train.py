@@ -13,7 +13,7 @@ def run_train():
     start_time = time.time()
 
     # Create model
-    m = model.create_compile_model_fredi()
+    m = model.create_compile_model_fabi()
 
     # Load data
     data_train, data_val = load_dataset()
