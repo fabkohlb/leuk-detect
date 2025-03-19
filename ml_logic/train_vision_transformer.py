@@ -1,6 +1,6 @@
 from transformers import Trainer, TrainingArguments, AutoImageProcessor
 from transformers import AutoModelForImageClassification
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from torch.utils.data import Dataset
 from torchvision import transforms
 import tensorflow as tf
@@ -11,6 +11,8 @@ import params
 from PIL import Image
 import pandas as pd
 from google.cloud import storage
+from matplotlib import pyplot as plt
+import seaborn as sns
 
 
 print("🤗 Load AutoImageProcessor")
@@ -176,12 +178,12 @@ def evaluate_model(model, dataset):
 
     # Compute evaluation metrics
     accuracy = accuracy_score(true_labels, predictions)
-    report = classification_report(true_labels, predictions, zero_division=0)
+    report = classification_report(true_labels, predictions, zero_division=0, output_dict=True)
 
     print(f"Accuracy: {accuracy:.4f}")
     print("Classification Report:\n", report)
 
-    return accuracy, report
+    return accuracy, report, predictions, true_labels
 
 
 if __name__ == '__main__':
@@ -193,17 +195,29 @@ if __name__ == '__main__':
     data_val, num_labels_val = load_and_process_dataset('validation')
     print("✅ Validation dataset loaded and processed.")
     print("📊 Evaluate the model")
-    accuracy, report = evaluate_model(model, data_val)
+    accuracy, report, predictions, true_labels = evaluate_model(model, data_val)
 
-    png_filename = f"transformer_eval_plot.png"
+    # Create confusion matrix
+    cm = confusion_matrix(true_labels, predictions, normalize='true')  # Normalize rows to sum to 1
+    cm_percentage = cm * 100  # Convert to percentage
+
     csv_filename = f"transformer_classification_report.csv"
-    pd.DataFrame(report).to_csv(csv_filename)
+    png_filename = f"transformer_confusion_matrix.png"
+
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm_percentage, annot=True, fmt=".2f", cmap="Blues", cbar=True)
+    plt.xlabel("Predicted Label")
+    plt.ylabel("True Label")
+    plt.title("Confusion Matrix (Percentage)")
+    plt.savefig(png_filename)
+    plt.close()
+    print(f"Confusion matrix saved to {png_filename}")
+
+    df_report = pd.DataFrame(report).transpose()
+    df_report.to_csv(csv_filename, index=True)
 
     # Save model to GCS
-    client = storage.Client()
-    bucket = client.bucket(params.BUCKET_NAME)
-    blob = bucket.blob(f"evaluation/{png_filename}")
-    blob.upload_from_filename(filename=png_filename)
-
-    blob2 = bucket.blob(f"evaluation/{csv_filename}")
-    blob2.upload_from_filename(filename=csv_filename)
+    # client = storage.Client()
+    # bucket = client.bucket(params.BUCKET_NAME)
+    # blob2 = bucket.blob(f"evaluation/{csv_filename}")
+    # blob2.upload_from_filename(filename=csv_filename)
