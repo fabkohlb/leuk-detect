@@ -1,11 +1,13 @@
 import model
 from tensorflow.keras.callbacks import EarlyStopping
 from keras.utils import image_dataset_from_directory
+from sklearn.utils.class_weight import compute_class_weight
 import params
 import registry
 import time
 import cv2
 import os
+import numpy as np
 
 
 def run_train():
@@ -17,6 +19,23 @@ def run_train():
 
     # Load data
     data_train, data_val = load_dataset()
+
+    print(f"Len {len(data_train)}")
+    print(data_train.class_names)
+    labels_list = []
+    for images, labels in data_train:  # Loop through batches
+        labels_list.extend(np.argmax(labels.numpy(), axis=1))
+    print(f"Labels list {np.unique(labels_list)}")
+
+    # Compute class weights
+    class_weights = compute_class_weight(
+        'balanced',
+        classes=np.arange(len(data_train.class_names)),
+        y=labels_list
+    )
+    class_weights = {i: class_weights[i] for i in range(len(data_train.class_names))}
+    print(f"Class weights: {class_weights}")
+    exit()
 
     # Train
     es = EarlyStopping(patience=2)

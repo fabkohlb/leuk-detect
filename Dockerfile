@@ -2,7 +2,7 @@ FROM python:3.10.6-bullseye
 
 COPY requirements.txt requirements.txt
 
-RUN apt-get clean -y
+#RUN apt-get clean -y
 RUN apt-get update -y
 RUN apt install libgl1-mesa-glx -y
 RUN apt-get install 'ffmpeg'\
