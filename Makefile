@@ -69,6 +69,9 @@ data:
 # running the split script
 	$$PYENV_ROOT/versions/leuk-detect/bin/python ml_logic/train_val_test_split.py
 
+# make models directory
+	mkdir models
+
 # Remove the data directory
 clean:
 	rm -rf $(DATA_DIR)
