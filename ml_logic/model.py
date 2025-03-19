@@ -5,14 +5,14 @@ from tensorflow.keras import models, layers
 
 def create_compile_model_fredi():
     augmenting = models.Sequential([
-        layers.experimental.preprocessing.Rescaling(1./255),
-        layers.experimental.preprocessing.RandomFlip("horizontal_and_vertical"),
-        layers.experimental.preprocessing.RandomRotation(0.2),
-        layers.experimental.preprocessing.RandomZoom(0.05),
-        layers.experimental.preprocessing.RandomTranslation(0.05, 0.05),
+        layers.Rescaling(1./255),
+        layers.RandomFlip("horizontal_and_vertical"),
+        layers.RandomRotation(0.2),
+        layers.RandomZoom(0.05),
+        layers.RandomTranslation(0.05, 0.05),
     ])
 
-    base_model = tf.keras.applications.ResNet50(
+    base_model = tf.keras.applications.EfficientNetB7(
         include_top=False,
         weights="imagenet",
         input_shape=(224, 224, 3),

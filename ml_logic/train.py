@@ -22,7 +22,7 @@ def run_train():
     data_train, data_val = load_dataset()
 
     # Compute class weights
-    class_weights = compute_class_weight())
+    class_weights = compute_class_weight()
 
     # Train
     es = EarlyStopping(patience=2)
