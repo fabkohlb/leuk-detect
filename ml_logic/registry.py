@@ -6,7 +6,7 @@ print(f"Current working directory: {os.getcwd()}")
 from tensorflow import keras
 from google.cloud import storage
 import os
-import params
+from ml_logic import params
 import time
 
 import mlflow
