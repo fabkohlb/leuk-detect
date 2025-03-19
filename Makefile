@@ -49,7 +49,7 @@ setup:
 # Download the data from Google Cloud Storage and unzip it
 data:
 	mkdir -p $(DATA_DIR)
-	gsutil cp $(BUCKET)/$(ZIP_FILE) .
+	gsutil cp gs://$(BUCKET_NAME)/$(ZIP_FILE) .
 	unzip -o $(ZIP_FILE) -d $(DATA_DIR)
 	rm -f $(ZIP_FILE)
 
