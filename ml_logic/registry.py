@@ -1,12 +1,10 @@
 import sys
 import os
-print(f"Current working directory: {os.getcwd()}")
-
 
 from tensorflow import keras
 from google.cloud import storage
 import os
-from ml_logic import params
+import params
 import time
 
 import mlflow
