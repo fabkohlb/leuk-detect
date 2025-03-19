@@ -14,9 +14,6 @@ def run_train():
     print(f"▶️ Start training")
     start_time = time.time()
 
-    # Create model
-    m = model.create_compile_model_fredi()
-
     # Load data
     data_train, data_val = load_dataset()
 
@@ -35,6 +32,9 @@ def run_train():
     )
     class_weights = {i: class_weights[i] for i in range(len(data_train.class_names))}
     print(f"Class weights: {class_weights}")
+
+    # Create model
+    m = model.create_compile_model_fredi(len(data_train.class_names))
 
     # Train
     es = EarlyStopping(patience=3, restore_best_weights=True)
