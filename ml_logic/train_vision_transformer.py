@@ -1,5 +1,6 @@
 from transformers import Trainer, TrainingArguments, AutoImageProcessor
 from transformers import AutoModelForImageClassification
+from sklearn.metrics import accuracy_score, classification_report
 from torch.utils.data import Dataset
 from torchvision import transforms
 import tensorflow as tf
@@ -7,6 +8,10 @@ import os
 import torch
 import numpy as np
 import params
+from PIL import Image
+import pandas as pd
+from google.cloud import storage
+
 
 print("🤗 Load AutoImageProcessor")
 image_processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
@@ -52,7 +57,6 @@ class CustomDataset(Dataset):
             pil_image = self.transform(pil_image)
 
         return {"pixel_values": pil_image, "labels": torch.tensor(label, dtype=torch.long)}
-
 
 
 # num labels = len(data_train_raw.class_names)
@@ -127,6 +131,79 @@ def train_vision_transformer():
     return res
 
 
+def load_trained_model(checkpoint_path, num_labels):
+    """Load a trained model from a checkpoint."""
+    model = AutoModelForImageClassification.from_pretrained(checkpoint_path, num_labels=num_labels)
+    model.eval()
+    print("✅ Model loaded from checkpoint.")
+    return model
+
+
+def predict(image_path, model, image_processor):
+    """Predict the class of an image using the trained model."""
+    model.eval()  # Set the model to evaluation mode
+
+    # Load and preprocess the image
+    image = Image.open(image_path).convert("RGB")
+    inputs = image_processor(image, return_tensors="pt")
+    pixel_values = inputs["pixel_values"]
+
+    # Perform inference
+    with torch.no_grad():
+        outputs = model(pixel_values)
+        logits = outputs.logits
+        predicted_class = torch.argmax(logits, dim=-1).item()
+
+    return predicted_class
+
+
+def evaluate_model(model, dataset):
+    """Evaluate the model on a given dataset and print metrics."""
+    model.eval()  # Set to evaluation mode
+    predictions, true_labels = [], []
+
+    for batch in dataset:
+        pixel_values = batch["pixel_values"].unsqueeze(0)  # Ensure batch shape
+        labels = batch["labels"].item()
+
+        with torch.no_grad():
+            outputs = model(pixel_values)
+            logits = outputs.logits
+            predicted_class = torch.argmax(logits, dim=-1).item()
+
+        predictions.append(predicted_class)
+        true_labels.append(labels)
+
+    # Compute evaluation metrics
+    accuracy = accuracy_score(true_labels, predictions)
+    report = classification_report(true_labels, predictions, zero_division=0)
+
+    print(f"Accuracy: {accuracy:.4f}")
+    print("Classification Report:\n", report)
+
+    return accuracy, report
+
+
 if __name__ == '__main__':
-    print("🚂 Training the Vision Transformer model...")
-    train_vision_transformer()
+    # Evaluate model
+    print("🔍 Load the trained model")
+    model = load_trained_model("models/checkpoint-64240", num_labels=15)
+    print("✅ Model loaded.")
+    print("🔍 Load and process the validation dataset")
+    data_val, num_labels_val = load_and_process_dataset('validation')
+    print("✅ Validation dataset loaded and processed.")
+    print("📊 Evaluate the model")
+    accuracy, report = evaluate_model(model, data_val)
+
+    png_filename = f"transformer_eval_plot.png"
+    csv_filename = f"transformer_classification_report.csv"
+    pd.DataFrame(report).to_csv(csv_filename)
+
+    # Save model to GCS
+    client = storage.Client()
+    bucket = client.bucket(params.BUCKET_NAME)
+    blob = bucket.blob(f"evaluation/{png_filename}")
+    blob.upload_from_filename(filename=png_filename)
+
+    blob2 = bucket.blob(f"evaluation/{csv_filename}")
+    blob2.upload_from_filename(filename=csv_filename)
