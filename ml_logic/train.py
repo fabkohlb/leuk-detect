@@ -35,15 +35,16 @@ def run_train():
     )
     class_weights = {i: class_weights[i] for i in range(len(data_train.class_names))}
     print(f"Class weights: {class_weights}")
-    exit()
 
     # Train
-    es = EarlyStopping(patience=2)
+    es = EarlyStopping(patience=3, restore_best_weights=True)
     history = m.fit(
         data_train,
         batch_size=params.BATCH_SIZE,
         epochs=params.EPOCHS,
         validation_data=data_val,
+        class_weight=class_weights,
+        callbacks=[es]
     )
     training_duration = time.time() - start_time
     print(f"✅ Training complete in {(training_duration/60):.2f} minutes")
