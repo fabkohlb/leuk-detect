@@ -47,7 +47,7 @@ def _eval_model(model):
 
     # Plot confusion matrix
     plt.figure(figsize=(8, 6))
-    sns.heatmap(cm_normalized, annot=True, fmt="d", cmap="Blues", xticklabels=class_names, yticklabels=class_names)
+    sns.heatmap(cm_normalized, annot=True, fmt=".2f", cmap="Blues", xticklabels=class_names, yticklabels=class_names, zero_division=1)
     plt.xlabel("Predicted Label")
     plt.ylabel("True Label")
     plt.title("Confusion Matrix")
