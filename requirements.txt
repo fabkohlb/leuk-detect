@@ -15,4 +15,9 @@ uvicorn
 python-multipart
 google-cloud-storage==2.14.0
 mlflow
+transformers
+torch
+tf-keras
+torchvision
+accelerate>=0.26.0
 python-dotenv
