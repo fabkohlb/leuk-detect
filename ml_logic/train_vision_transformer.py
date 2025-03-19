@@ -190,34 +190,30 @@ if __name__ == '__main__':
     # Evaluate model
     print("🔍 Load the trained model")
     model = load_trained_model("models/checkpoint-64240", num_labels=15)
-    print("✅ Model loaded.")
-    print("🔍 Load and process the validation dataset")
-    data_val, num_labels_val = load_and_process_dataset('validation')
-    print("✅ Validation dataset loaded and processed.")
-    print("📊 Evaluate the model")
-    accuracy, report, predictions, true_labels = evaluate_model(model, data_val)
+    # print("✅ Model loaded.")
+    # print("🔍 Load and process the validation dataset")
+    # data_val, num_labels_val = load_and_process_dataset('validation')
+    # print("✅ Validation dataset loaded and processed.")
+    # print("📊 Evaluate the model")
+    # accuracy, report, predictions, true_labels = evaluate_model(model, data_val)
 
-    # Create confusion matrix
-    cm = confusion_matrix(true_labels, predictions, normalize='true')  # Normalize rows to sum to 1
-    cm_percentage = cm * 100  # Convert to percentage
+    # # Create confusion matrix
+    # cm = confusion_matrix(true_labels, predictions, normalize='true')  # Normalize rows to sum to 1
+    # cm_percentage = cm * 100  # Convert to percentage
 
-    csv_filename = f"transformer_classification_report.csv"
-    png_filename = f"transformer_confusion_matrix.png"
+    # csv_filename = f"transformer_classification_report.csv"
+    # png_filename = f"transformer_confusion_matrix.png"
 
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(cm_percentage, annot=True, fmt=".2f", cmap="Blues", cbar=True)
-    plt.xlabel("Predicted Label")
-    plt.ylabel("True Label")
-    plt.title("Confusion Matrix (Percentage)")
-    plt.savefig(png_filename)
-    plt.close()
-    print(f"Confusion matrix saved to {png_filename}")
+    # plt.figure(figsize=(8, 6))
+    # sns.heatmap(cm_percentage, annot=True, fmt=".2f", cmap="Blues", cbar=True)
+    # plt.xlabel("Predicted Label")
+    # plt.ylabel("True Label")
+    # plt.title("Confusion Matrix (Percentage)")
+    # plt.savefig(png_filename)
+    # plt.close()
+    # print(f"Confusion matrix saved to {png_filename}")
 
-    df_report = pd.DataFrame(report).transpose()
-    df_report.to_csv(csv_filename, index=True)
+    # df_report = pd.DataFrame(report).transpose()
+    # df_report.to_csv(csv_filename, index=True)
 
-    # Save model to GCS
-    # client = storage.Client()
-    # bucket = client.bucket(params.BUCKET_NAME)
-    # blob2 = bucket.blob(f"evaluation/{csv_filename}")
-    # blob2.upload_from_filename(filename=csv_filename)
+    # Predict
